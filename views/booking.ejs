@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Author Homepage - Bookings Page
+
+    This page is part of the Author Homepage where the author can view all the bookings for their published workshops. The features include:
+
+    - Displaying the title, ticket type, event date, number of tickets purchased, and booking time for each booking.
+    - Iterates through workshops, their associated ticket types, and the bookings made for each ticket type.
+    - Provides a button to check all bookings.
+
+    This page is intended to provide an overview of all tickets purchased for a particular workshop event and help the author keep track of attendee reservations.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <title>Booking</title>
+</head>
+<body>
+    <!-- Top Bar with page heading and settings link -->
+    <div class="top-bar">
+        <p id="head">Author Homepage</p>
+        <!-- Link to settings page -->
+        <a href="/author/home" id="setting">Back</a>
+    </div>
+
+    <!-- Display the blog title, subtitle, and author -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+    <h5><%= blog.blog_author %></h5>
+
+    <!-- Section for displaying bookings for published workshops -->
+    <div class="content">
+        <h5 id="content-title">Published Upcoming Workshop Sessions</h5>
+
+        <!-- Table for displaying the booking details -->
+        <table class="content-table">
+            <thead>
+                <tr>
+                    <!-- Table headers -->
+                    <th>Workshop Title</th>
+                    <th>Ticket Type</th>
+                    <th>Event Date</th>
+                    <th>Number of tickets purchased</th>
+                    <th>Booking Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through each workshop and its associated bookings -->
+                <% bookings.forEach(function(workshop) { %>
+                    <!-- Loop through each ticket type for the workshop -->
+                    <% workshop.tickets.forEach(function(ticket) { %>
+                        <!-- Loop through each booking for the ticket type -->
+                        <% ticket.bookings.forEach(function(booking) { %>
+                            <tr>
+                                <!-- Display workshop title -->
+                                <td><%= workshop.workshopTitle %></td>
+                                <!-- Display ticket type -->
+                                <td><%= ticket.ticketsType %></td>
+                                <!-- Display workshop event date -->
+                                <td><%= workshop.workshopEventDate %></td>
+                                <!-- Display number of tickets purchased -->
+                                <td><%= booking.booked_tickets_tickets_number %> </td>
+                                <!-- Display the time the booking was made -->
+                                <td><%= booking.booked_tickets_time %> </td>
+                            </tr>
+                        <% }); %>
+                    <% }); %>
+                <% }); %>
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+</html>

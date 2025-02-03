@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Author Dashboard - Edit Workshop Draft
+
+    This page allows the author to edit an existing workshop draft. The author can update the following details:
+
+    - Title, subtitle, and description of the workshop.
+    - Edit existing ticket types, available tickets, and prices.
+    - View workshop creation and last modified times.
+    - The status of the workshop is shown as "Draft".
+
+    The form also includes validation to ensure all fields are filled before submission, along with a confirmation prompt before saving the changes.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css" />
+    <title>Draft</title>
+</head>
+<body>
+    <!-- Top Bar with heading and back link to the author homepage -->
+    <div class="top-bar">
+        <p id="head">Author Dashboard</p>
+        <!-- Link to go back to the author's main homepage -->
+        <a href="/author/home" id="setting">Back</a>
+    </div>
+
+    <!-- Display blog title, subtitle, and author -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+    <h5><%= blog.blog_author %></h5>
+
+    <!-- Section to edit an existing workshop draft -->
+    <div class="content">
+        <h5 id="content-title">Edit Workshop Drafts</h5>
+        
+        <!-- Form to update the existing workshop draft -->
+        <form action="/author/draft-edit/<%= workshop.workshop_id %>" method="POST" onsubmit="return confirmUpdate()">
+            
+            <!-- Display workshop creation and last modified times, along with its status -->
+            <div class="sub-content">
+                <ul>
+                    <li>Created: <%= workshop.workshop_created_time %></li><br>
+                    <li>Last Modified: <%= workshop.workshop_last_modified %></li><br>
+                    <li>Status: Draft</li>
+                </ul>
+            </div>
+
+            <!-- Input fields to edit workshop details -->
+            <div class="sub-content-input">
+                <ul>
+                    <!-- Editable Title and Subtitle -->
+                    <li>Title: <input type="text" id="workshop_title" name="workshop_title" value="<%= workshop.workshop_title %>" required></li><br>
+                    <li>Subtitle: <input type="text" id="workshop_subtitle" name="workshop_subtitle" value="<%= workshop.workshop_subtitle %>" required></li><br>
+
+                    <!-- Section to edit ticket details for the workshop -->
+                    <li>Tickets: </li>
+                    <% tickets.forEach(function(ticket, index) { %>
+                        <!-- Hidden input for each ticket id -->
+                        <input type="hidden" name="tickets_id[]" value="<%= ticket.tickets_id %>">
+                        <br>
+                        <!-- Editable ticket type, number available, and price for each ticket -->
+                        <li>Type <%= index + 1%>: 
+                            <input type="text" name="tickets_type[]" value="<%= ticket.tickets_type %>" required>
+                        </li>
+                        <li>Available: 
+                            <input type="number" name="tickets_number_available[]" value="<%= ticket.tickets_number_available %>" required>
+                        </li>
+                        <li>Price: 
+                            <input type="number" name="tickets_price[]" value="<%= ticket.tickets_price %>" required>
+                        </li>
+                        <br>
+                    <% }); %>
+                    <br>
+                    <!-- Editable description for the workshop -->
+                    <li>Description: <textarea id="workshop_description" name="workshop_description" rows="5" required><%= workshop.workshop_description %></textarea></li>
+                </ul>
+            </div>
+            
+            <!-- Submit button to update the workshop -->
+            <button class="create_btn" type="submit">Update</button>
+
+            <!-- JavaScript for validation and confirmation before submitting the form -->
+            <script>
+               function confirmUpdate() {
+                  // Retrieve form values
+                  const title = document.getElementById('workshop_title').value.trim();
+                  const subtitle = document.getElementById('workshop_subtitle').value.trim();
+                  const description = document.getElementById('workshop_description').value.trim();
+
+                  // Validation to ensure all required fields are filled out
+                  if (!title || !subtitle || !description ) {
+                     alert('All fields must be filled out. Please complete the form.');
+                     return false;
+                  }
+
+                  // Confirmation before submitting the form
+                   const confirmation = confirm('Are you sure you want to update this workshop?');
+                   return confirmation;
+               }
+           </script>
+
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Event Booking Page for Reader Dashboard
+
+    This page allows the reader to view a workshop's details and book tickets for it. 
+    It displays:
+    - Workshop title, subtitle, description, and event date.
+    - Available ticket types, their availability, and prices.
+    - A form for entering personal details (name, email) and selecting the number of tickets to book.
+    - Validation to ensure the user doesn't book more tickets than available.
+    - Confirmation before submitting the booking.
+
+    The form sends a POST request to process the ticket booking and updates the ticket availability in the database.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css" />
+    <title>Event</title>
+</head>
+<body>
+    <!-- Top Bar with heading and back link to the reader homepage -->
+    <div class="top-bar">
+        <p id="head">Reader Dashboard</p>
+        <!-- Link to go back to the reader's main homepage -->
+        <a href="/reader/home" id="setting">Back</a>
+    </div>
+
+    <!-- Display blog title, subtitle, and author -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+    <h5><%= blog.blog_author %></h5>
+
+    <!-- Section for the event details and booking form -->
+    <div class="event-content">
+        <h5 id="content-title">Workshop Booking</h5>
+        <form action="/reader/event/<%= workshop.workshop_id %>" method="POST" onsubmit="return confirmUpdate()">
+            <div class="event-container">
+                <ul>
+                    <!-- Display workshop details like title, subtitle, description, and event date -->
+                    <li><h2><%= workshop.workshop_title %></h2></li>
+                    <li><h3><%= workshop.published_subtitle %></h3></li>
+                    <li><p><%= workshop.workshop_description %></p></li>
+                    <li><h5>Date and time: <%= new Date(workshop.workshop_event_date).toLocaleString() %></h5></li>
+
+                    <!-- Display available tickets, their availability, and price -->
+                    <% if (tickets && tickets.length > 0) { %>
+                        <% tickets.forEach(function(ticket, index) { %>
+                            <div class="ticket-container">
+                                <li><h3><%= ticket.tickets_type %></h3></li>
+                                <li><h5>Available: <%= ticket.tickets_number_available %></h5></li>
+                                <li><strong>Price: $</strong><%= ticket.tickets_price %></li>
+
+                                <!-- Hidden fields to store ticket data -->
+                                <input type="hidden" id="tickets_id" name="tickets_id" value="<%= ticket.tickets_id %>">
+                                <input type="hidden" class="ticket-availability" value="<%= ticket.tickets_number_available %>">
+                                <br>
+
+                                <!-- Input for booking tickets -->
+                                <li>How many <%= ticket.tickets_type %> tickets you want? 
+                                    <input type="number" class='ticket-input' id="booked_tickets_tickets_number" name="booked_tickets_tickets_number" min="1" required>
+                                </li>
+                                <br>
+                            </div>    
+                        <% }); %>
+                    <% } else { %>
+                        <li>No tickets available for this event.</li>
+                    <% } %>
+
+                    <!-- Input for user details (name and email) -->
+                    <li>Name: <input type="text" id="user_name" name="user_name" required></li>
+                    <br>
+                    <li>Email: <input type="text" id="user_email" name="user_email" required></li>
+                    <br>
+
+                    <!-- Submit button to book the tickets -->
+                    <button type="submit" class="create_btn">Book it!</button>
+
+                    <!-- JavaScript for validating form before submission -->
+                    <script>
+                        function confirmUpdate() {
+                            const ticketsInput = document.querySelectorAll('.ticket-input'); 
+                            const availableTickets = document.querySelectorAll('.ticket-availability'); 
+                            const user_name = document.getElementById('user_name'); 
+                            const user_email = document.getElementById('user_email'); 
+
+                            // Loop through each ticket input to check if it's less than the available tickets
+                            for (let i = 0; i < ticketsInput.length; i++) {
+                                const userInput = parseInt(ticketsInput[i].value); // Get the user input for the number of tickets
+                                const availableCount = parseInt(availableTickets[i].value); // Get the available tickets count for this type
+                                
+                                // Alert if the user tries to book more tickets than available
+                                if (userInput > availableCount) {
+                                    alert('You can\'t book more tickets than available.');
+                                    return false;
+                                }
+                            }
+
+                            // Check if all required fields are filled
+                            if (!user_name || !user_email || !ticketsInput) {
+                                alert('All fields must be filled out. Please complete the form.');
+                                return false;
+                            }
+
+                            // Confirmation before submitting the booking
+                            const confirmation = confirm('Are you sure you want to book this workshop?');
+                            return confirmation;
+                        }
+                    </script>
+                    
+                </ul>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

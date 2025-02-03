@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Author Dashboard - Site Settings
+
+    This page allows the author to update the blog's site settings, including:
+
+    - Blog title
+    - Blog subtitle
+    - Author name
+
+    The author is prompted to fill all fields before submission. Upon form submission, a confirmation prompt ensures that the author is sure about the update.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css" />
+    <title>Setting</title>
+</head>
+<body>
+    <!-- Top Bar with heading and back link to the author homepage -->
+    <div class="top-bar">
+        <p id="head">Author Dashboard</p>
+        <!-- Link to go back to the author's main homepage -->
+        <a href="/author/home" id="setting">Back</a>
+    </div>
+
+    <!-- Display blog title, subtitle, and author -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+    <h5><%= blog.blog_author %></h5>
+
+    <!-- Section to update blog settings -->
+    <div class="content">
+        <h5 id="content-title">Site Setting</h5>
+        
+        <!-- Form to update the blog settings -->
+        <form action="/author/setting/<%= blog.blog_id %>" method="POST" onsubmit="return confirmUpdate()">
+
+            <!-- Input fields for blog title, subtitle, and author name -->
+            <div class="sub-content-input">
+                <ul>
+                    <!-- Editable blog title -->
+                    <li>Blog Title: <input type="text" id="blog_title" name="blog_title" required></li>
+                    <!-- Editable blog subtitle -->
+                    <li>Blog Subtitle: <input type="text" id="blog_subtitle" name="blog_subtitle" required></li>                  
+                    <!-- Editable author name -->
+                    <li>Author Name: <input type="text" id="blog_author" name="blog_author" required></li>            
+                </ul>
+            </div>
+            
+            <!-- Submit button to update the blog settings -->
+            <button class="create_btn" type="submit">Update</button>
+
+            <!-- JavaScript to confirm before submitting the form -->
+            <script>
+               function confirmUpdate() {
+                  // Retrieve form values
+                  const title = document.getElementById('blog_title').value.trim();
+                  const subtitle = document.getElementById('blog_subtitle').value.trim();
+                  const name = document.getElementById('blog_author').value.trim();
+
+                  // Validation to ensure all required fields are filled out
+                  if (!title || !subtitle || !name) {
+                     alert('All fields must be filled out. Please complete the form.');
+                     return false;
+                  }
+
+                  // Confirmation before submitting the form
+                   const confirmation = confirm('Are you sure to update this blog setting?');
+                   return confirmation;
+               }
+           </script>
+
+        </form>
+    </div>
+</body>
+</html>

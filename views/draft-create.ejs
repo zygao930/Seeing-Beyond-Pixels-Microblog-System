@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Author Dashboard - Create Workshop Draft
+
+    This page allows the author to create a new workshop draft by filling out the necessary details. The features include:
+
+    - A form to enter workshop details, such as code, title, subtitle, event date, available tickets, ticket types, and a description.
+    - Validation to ensure all required fields are filled out before submitting the form.
+    - A confirmation prompt before submitting the form to prevent accidental submissions.
+
+    The goal of this page is to enable the author to create and manage their workshops by providing detailed event information.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/main.css" />
+    <title>Draft</title>
+</head>
+<body>
+    <!-- Top Bar with heading and back link to the author homepage -->
+    <div class="top-bar">
+        <p id="head">Author Dashboard</p>
+        <!-- Link to go back to the author's main homepage -->
+        <a href="/author/home" id="setting">Back</a>
+    </div>
+
+    <!-- Display blog title, subtitle, and author -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+    <h5><%= blog.blog_author %></h5>
+
+    <!-- Section to create new workshop drafts -->
+    <div class="content">
+        <h5 id="content-title">Create Workshop Drafts</h5>
+        
+        <!-- Form to create a new workshop draft -->
+        <form action="/author/draft-create" method="POST" onsubmit="return confirmUpdate()">
+            
+            <div class="sub-content-input">
+                <ul>
+                  <!-- Input fields for the workshop details -->
+                  <li>Code: <input type="number" id="workshop_code" name="workshop_code" required></li><br> 
+                  <li>Title: <input type="text" id="workshop_title" name="workshop_title" required></li><br>
+                  <li>Subtitle: <input type="text" id="workshop_subtitle" name="workshop_subtitle" required></li><br>                
+                  <li>Date: <input type="datetime_local" id="workshop_event_date" name="workshop_event_date" required></li><br>   
+                  <li>Available Tickets: <input type="number" id="workshop_available_tickets" name="workshop_available_tickets" required></li><br>
+                  <li>VIP Tickets Number: <input type="number" id="VIP_tickets_number_available" name="VIP_tickets_number_available" required></li><br> 
+                  <li>VIP Tickets Price: <input type="number" id="VIP_tickets_price" name="VIP_tickets_price" required></li><br>
+                  <li>General Tickets Number: <input type="number" id="General_tickets_number_available" name="General_tickets_number_available" required></li><br> 
+                  <li>General Tickets Price: <input type="number" id="General_tickets_price" name="General_tickets_price" required></li><br> 
+                  <li>Description: <textarea id="workshop_description" name="workshop_description" rows="5" required></textarea></li>
+                </ul>
+            </div>
+            
+            <!-- Submit button to create/update the workshop -->
+            <button class="create_btn" type="submit">Update</button>
+
+            <!-- JavaScript for validation and confirmation before submission -->
+            <script>
+               function confirmUpdate() {
+                  // Retrieve form values
+                  const code = document.getElementById('workshop_code').value.trim();
+                  const title = document.getElementById('workshop_title').value.trim();
+                  const subtitle = document.getElementById('workshop_subtitle').value.trim();
+                  const description = document.getElementById('workshop_description').value.trim();
+                  const available_tickets = document.getElementById('workshop_available_tickets').value.trim();
+                  const VIP_tickets_number_available = document.getElementById('VIP_tickets_number_available').value.trim();
+                  const VIP_tickets_price = document.getElementById('VIP_tickets_price').value.trim();
+                  const General_tickets_number_available = document.getElementById('General_tickets_number_available').value.trim();
+                  const General_tickets_price = document.getElementById('General_tickets_price').value.trim();
+                  const event_date = document.getElementById('workshop_event_date').value.trim();
+
+                  // Validation to ensure all required fields are filled out
+                  if (!title || !subtitle || !description || !code || !available_tickets || !event_date) {
+                     alert('All fields must be filled out. Please complete the form.');
+                     return false;
+                  }
+
+                  // Confirmation before submitting the form
+                  const confirmation = confirm('Are you sure to update this workshop?');
+                  return confirmation;
+               }
+           </script>
+
+        </form>
+    </div>
+
+</body>
+</html>

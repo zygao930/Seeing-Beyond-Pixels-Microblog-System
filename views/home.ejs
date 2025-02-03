@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Homepage - Main Navigation
+
+    This page serves as the homepage for the author. It displays the following:
+
+    - The title and subtitle of the blog.
+    - Links to navigate to the Author and Reader gateways.
+
+    The page includes a top bar with the homepage title and a section that shows the two primary navigation links for the Author and Reader gateways.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet"  type="text/css" href="/main.css" />
+    <!-- Title of the webpage -->
+    <title>Home</title>
+</head>
+<body>
+    <!-- Top Bar with heading for the homepage -->
+    <div class="top-bar">
+        <!-- Heading for the page -->
+        <p id="head">Homepage</p>
+    </div>
+
+    <!-- Display blog title and subtitle -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+
+    <!-- Section header for upcoming workshop sessions -->
+    <h5 id="content-title">Upcoming Workshop Sessions</h5>
+
+    <!-- Container holding navigation options for Author and Reader -->
+    <div class="home-container">
+        <!-- Left side button for the Author gateway -->
+        <div class="home-content content-left" onclick="window.location='/author/home';">
+            <h1>Author</h1>
+            Gateway          
+        </div>         
+        <!-- Right side button for the Reader gateway -->
+        <div class="home-content content-right" onclick="window.location='/reader/home';">
+            <h1>Reader</h1>
+            Gateway          
+        </div>   
+    </div>
+</body>
+</html>

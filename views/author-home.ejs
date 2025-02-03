@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Author Homepage
+
+    This is the Author Homepage where the author can manage upcoming workshop sessions. It includes:
+    
+    - Displaying blog title, subtitle, and author information.
+    - Managing **draft** workshops, including options to edit, publish (with confirmation prompt), or delete (with confirmation prompt) each draft.
+    - Managing **published** workshops, including the option to share the event link, or delete the workshop (with confirmation prompt).
+    - Buttons to create new drafts and check all bookings.
+
+    This page is designed to help the author organize and manage their events with functionality to update their workshops, review bookings, and share the event links with attendees.
+
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Author Home</title>
+</head>
+<body>
+    <!-- Top Bar with navigation and page heading -->
+    <div class="top-bar">
+        <p id="head">Author Homepage</p>
+        <!-- Link to Settings page -->
+        <a href="/author/setting" id="setting">Setting</a>
+    </div>
+
+    <!-- Display the blog title, subtitle, and author -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+    <h5><%= blog.blog_author %></h5>
+
+    <!-- Section for Draft Workshop Sessions -->
+    <div class="content">
+        <h5 id="content-title">Upcoming Workshop Sessions Drafts</h5>
+
+        <!-- Table for displaying draft workshops -->
+        <table class="content-table">
+            <thead>
+                <tr>
+                    <!-- Table headers -->
+                    <th>Title</th>
+                    <th>Subtitle</th>
+                    <th>Created</th>
+                    <th>Last Modified</th>
+                    <th>Available Tickets</th>
+                    <th>Event Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through and display each draft workshop -->
+                <% workshopDrafts.forEach(function(draft){ %>
+                    <tr>
+                        <!-- Display workshop details -->
+                        <td><%= draft.workshop_title %></td>
+                        <td><%= draft.workshop_subtitle %></td>
+                        <td><%= draft.workshop_created_time %></td>
+                        <td><%= draft.workshop_last_modified %></td>
+                        <td><%= draft.workshop_available_tickets %></td>
+                        <td><%= draft.workshop_event_date %></td>
+                        <td> 
+                            <!-- Form to edit the draft workshop -->
+                            <form action="/author/draft-edit/<%= draft.workshop_id %>" method="get">
+                                <button type="submit">edit</button>
+                            </form>
+
+                            <!-- Form to publish the draft workshop with confirmation prompt -->
+                            <form action="/author/draft-publish/<%= draft.workshop_id %>" method="post" onsubmit="return confirmPublish()">
+                                <button type="submit">Publish</button>
+                            </form>
+
+                            <script>
+                                // Confirmation prompt before publishing a draft workshop
+                                function confirmPublish() {
+                                    const confirmation = confirm('Are you sure to publish this workshop?');
+                                    return confirmation;
+                                }
+                            </script>
+
+                            <!-- Form to delete the draft workshop with confirmation prompt -->
+                            <form action="/author/draft-delete/<%= draft.workshop_id %>" method="post" onsubmit="return confirmDelete()">
+                                <button type="submit">Delete</button>
+                            </form>
+
+                            <script>
+                                // Confirmation prompt before deleting a draft workshop
+                                function confirmDelete() {
+                                    const confirmation = confirm('Are you sure to delete this draft?');
+                                    return confirmation;
+                                }
+                            </script>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <!-- Button to create a new draft workshop -->
+        <form action="draft-create" method="get">
+            <button class="create_btn">Create a new workshop draft</button>
+        </form>
+    </div>
+
+    <!-- Section for Published Workshop Sessions -->
+    <div class="content">
+        <h5 id="content-title">Published Upcoming Workshop Sessions</h5>
+
+        <!-- Table for displaying published workshops -->
+        <table class="content-table">
+            <thead>
+                <tr>
+                    <!-- Table headers -->
+                    <th>Title</th>
+                    <th>Subtitle</th>
+                    <th>Created</th>
+                    <th>Published</th>
+                    <th>Available Tickets</th>
+                    <th>Event Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Loop through and display each published workshop -->
+                <% workshopPublished.forEach(function(published){ %>
+                    <tr>
+                        <!-- Display workshop details -->
+                        <td><%= published.workshop_title %></td>
+                        <td><%= published.workshop_subtitle %></td>
+                        <td><%= published.workshop_created_time %></td>
+                        <td><%= published.workshop_last_modified %></td>
+                        <td><%= published.workshop_available_tickets %></td>
+                        <td><%= published.workshop_event_date %></td>
+                        <td> 
+                            <!-- Form to share the published workshop (links to the reader page) -->
+                            <form action="/reader/event/<%= published.workshop_id %>" method="get" onsubmit="return confirmShare()">
+                                <button type="submit">Share</button>
+                            </form>
+
+                            <script>
+                                // Confirmation prompt before sharing a published workshop link
+                                function confirmShare() {
+                                    const confirmation = confirm('/reader/event/<%= published.workshop_id %>');
+                                    return confirmation;
+                                }
+                            </script>
+
+                            <!-- Form to delete the published workshop with confirmation prompt -->
+                            <form action="/author/published-delete/<%= published.workshop_id %>" method="post" onsubmit="return confirmDelete()">
+                                <button type="submit">Delete</button>
+                            </form>
+
+                            <script>
+                                // Confirmation prompt before deleting a published workshop
+                                function confirmDelete() {
+                                    const confirmation = confirm('Are you sure to delete this published workshop?');
+                                    return confirmation;
+                                }
+                            </script>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <!-- Button to check all bookings related to the workshops -->
+        <form action="booking" method="get">
+            <button class="create_btn">Check all bookings</button>
+        </form>
+    </div>
+
+</body>
+</html>

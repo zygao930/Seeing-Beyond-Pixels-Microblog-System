@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--
+    Reader Homepage
+
+    This page displays the reader's homepage, showcasing:
+    - Blog title and subtitle.
+    - List of upcoming workshops with titles, subtitles, and event dates.
+    - List of past workshops with titles, subtitles, and event dates.
+    - Placeholder elements are added to align the layout when there are fewer than 3 workshops in a row.
+
+    Each workshop (upcoming or past) is clickable and leads to the event details page.
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+    <title>Reader</title>
+</head>
+<body>
+    <!-- Top Bar with heading for the Reader Homepage -->
+    <div class="top-bar">
+        <p id="head">Reader Homepage</p>
+    </div>
+
+    <!-- Display the blog title and subtitle -->
+    <h1><%= blog.blog_title %></h1>
+    <h3><%= blog.blog_subtitle %></h3>
+
+    <!-- Section for Upcoming Workshop Sessions -->
+    <h5 id="content-title">Upcoming Workshop Sessions</h5>
+    <div class="reader-container">
+        <!-- Loop through the upcoming workshops and display them -->
+        <% 
+        const remainderUpcoming = workshopUpcoming.length % 3;
+        const placeholdersUpcoming = remainderUpcoming === 0 ? 0 : 3 - remainderUpcoming;
+        workshopUpcoming.forEach(function(workshop){ %>
+            <!-- Display each upcoming workshop and make it clickable -->
+            <div class="reader-sub-content" onclick="window.location='/reader/event/<%= workshop.workshop_id %>';">
+                <ul>
+                    <li><h2 class="workshop-title"><%= workshop.workshop_title %></h2></li>
+                    <li><%= workshop.workshop_subtitle %></li> 
+                    <br>             
+                    <li>Event Date: <%= workshop.workshop_event_date %></li> 
+                    <br>
+                </ul>     
+            </div>
+        <% }) %>      
+
+        <!-- Add placeholders if the number of workshops is not a multiple of 3 for proper layout -->
+        <% 
+        for (let i = 0; i < placeholdersUpcoming; i++) { %>
+            <div class="placeholder"></div>
+        <% } %>            
+    </div>
+
+    <!-- Section for Past Workshop Sessions -->
+    <h5 id="content-title">Past Workshop Sessions</h5>
+    <div class="reader-container">
+        <!-- Loop through the past workshops and display them -->
+        <% 
+        const remainderPast = workshopPast.length % 3;
+        const placeholdersPast = remainderPast === 0 ? 0 : 3 - remainderPast;
+        workshopPast.forEach(function(workshop){ %>
+            <!-- Display each past workshop and make it clickable -->
+            <div class="reader-sub-content-past" onclick="window.location='/author/home';">
+                <ul>
+                    <li><h3 class="published-title"><%= workshop.workshop_title %></h3></li>
+                    <li><%= workshop.workshop_subtitle %></li> 
+                    <br>             
+                    <li>Event Date: <%= workshop.workshop_event_date %></li> 
+                </ul>     
+            </div>
+        <% }) %>      
+
+        <!-- Add placeholders if the number of workshops is not a multiple of 3 for proper layout -->
+        <% 
+        for (let i = 0; i < placeholdersPast; i++) { %>
+            <div class="placeholder"></div>
+        <% } %>            
+    </div>
+
+</body>
+</html>
